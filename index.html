@@ -1,0 +1,542 @@
+<!DOCTYPE html>  
+<html lang="id">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Alesyah Shop</title>  
+
+<style>
+body{margin:0;font-family:Arial;background:#f5f5f5}
+
+/* SEMBUNYIKAN AWAL */
+header, .banner, .cat-title, .categories, #homePage, footer {
+display:none;
+}
+
+/* LANDING */
+#landingPage{
+height:100vh;
+background:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef') center/cover;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+}
+
+/* HEADER */
+header{background:#7904f6;color:#fff;padding:10px}
+
+/* ⬇️ FIX UTAMA DI SINI */
+.header-top{
+display:flex;
+align-items:center;
+justify-content:space-between; /* biar keranjang ke kanan */
+}
+
+.logo{font-weight:bold}
+
+/* SEARCH */
+.search-bar{
+flex:1;
+margin:0 10px;
+position:relative;
+}
+
+.search-bar input{
+width:100%;
+padding:8px 35px 8px 10px;
+border:none;
+border-radius:20px
+}
+
+/* ⬇️ FIX WARNA X */
+.clear-btn{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+display:none;
+font-size:14px;
+background:black;
+color:white;
+border-radius:50%;
+width:20px;
+height:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* ⬇️ FIX JARAK KERANJANG */
+.cart{
+cursor:pointer;
+margin-left:20px;
+font-size:18px;
+}
+
+/* BANNER */
+.banner{
+background:#7904f6;color:white;
+padding:15px;margin:10px;border-radius:10px
+}
+
+/* CATEGORY TITLE */
+.cat-title{
+padding:10px 10px 0 10px
+}
+
+/* CATEGORY */
+.categories{
+display:flex;gap:10px;
+padding:10px;
+overflow:auto;
+background:#fff;
+margin-bottom:10px
+}
+.categories div{
+background:#eee;
+padding:6px 12px;
+border-radius:20px;
+cursor:pointer;
+white-space:nowrap
+}
+
+/* PRODUCT */
+.container{padding:10px;padding-bottom:120px}
+
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.card{
+background:#fff;
+border-radius:12px;
+padding:10px;
+cursor:pointer;
+position:relative
+}
+
+.card img{
+width:100%;
+height:120px;
+object-fit:cover;
+border-radius:10px
+}
+
+.price{color:#000000;font-weight:bold}
+.old-price{text-decoration:line-through;color:gray;font-size:12px}
+.discount{color:red;font-size:12px}
+
+.flash{
+position:absolute;top:8px;left:8px;
+background:red;color:#fff;
+font-size:10px;
+padding:3px 6px;
+border-radius:5px
+}
+
+.rating{font-size:12px;color:#333}
+
+button{
+background:#e3f2fd;
+color:#7904f6;
+border:none;
+padding:6px 10px;
+border-radius:8px
+}
+
+/* CEKLIS */
+.checkmark{
+position:absolute;
+top:8px;
+right:8px;
+background:white;
+border-radius:50%;
+width:22px;
+height:22px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+cursor:pointer;
+border:1px solid #ccc;
+}
+.checked{
+background:#4caf50;
+color:white;
+}
+
+/* CART ITEM */
+.cart-item{
+display:flex;
+gap:10px;
+background:#fff;
+padding:10px;
+margin:10px 0;
+border-radius:10px;
+align-items:center
+}
+
+.hidden{display:none !important}
+
+/* FOOTER */
+footer{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#111;
+color:#fff;
+padding:10px
+}
+
+/* WA BUTTON */
+.wa-btn{
+background:#25D366;
+color:white;
+width:100%;
+padding:15px;
+display:block;
+text-align:center;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LANDING -->
+<div id="landingPage">
+<h1>BENGOK CRAFT</h1>
+<p>Turn Waste To Save The Planet</p>
+<h2>Handmade Craft</h2>
+<p>Make your dream come true</p>
+
+<button onclick="masukShop()" style="padding:12px 25px;border:none;border-radius:25px;background:black;color:white">
+Shop Now
+</button>
+</div>
+
+<!-- HEADER -->
+<header>
+<div class="header-top">
+<div class="logo">alesyah shop</div>
+
+<div class="search-bar">
+<input id="searchInput" placeholder="Cari produk..." onkeyup="searchProduct(this.value)">
+<span class="clear-btn" onclick="clearSearch()">×</span>
+</div>
+
+<div class="cart" onclick="openCart()">🛒 <span id="cartCount">0</span></div>
+</div>
+</header>
+
+<!-- BANNER -->
+<div class="banner">
+<h3>🛍️ Alesyah Shop</h3>
+<p>DISKON HINGGA 75%</p>
+<p>Belanja murah, cepat & terpercaya via WhatsApp</p>
+</div>
+
+<!-- CATEGORY TITLE -->
+<div class="cat-title">
+<h3>Kategori Produk</h3>
+<p style="margin:0;font-size:12px;color:gray">
+Pilih kategori sesuai kebutuhan kamu
+</p>
+</div>
+
+<!-- CATEGORY -->
+<div class="categories">
+<div onclick="filterCategory('all')">🏠 Semua</div>
+<div onclick="filterCategory('Hijab')">🧕 Hijab</div>
+<div onclick="filterCategory('Konde')">💇 Konde</div>
+<div onclick="filterCategory('Ciput')">🎀 Ciput</div>
+<div onclick="filterCategory('Pasmina')">🧕 Pasmina</div>
+</div>
+
+<!-- HOME -->
+<div id="homePage">
+<div class="container">
+<div class="products" id="productList"></div>
+</div>
+</div>
+
+<!-- CART -->
+<div id="cartPage" class="hidden">
+<div class="container">
+
+<button onclick="showPage('homePage')">❌ Tutup</button>
+
+<h2>Keranjang</h2>
+<div id="cartItems"></div>
+<h3 id="totalHarga"></h3>
+<hr>
+
+<h4>Pengiriman</h4>
+<select id="shipping" style="width:100%;padding:10px;margin-bottom:10px">
+<option value="10000">JNE - Rp10.000</option>
+<option value="15000">J&T - Rp15.000</option>
+<option value="20000">SiCepat - Rp20.000</option>
+</select>
+
+<h4>Data Pembeli</h4>
+
+<input id="nama" placeholder="Nama" style="width:100%;padding:10px;margin-bottom:10px">
+<input id="hp" placeholder="No HP" style="width:100%;padding:10px;margin-bottom:10px">
+<textarea id="alamat" placeholder="Alamat" style="width:100%;padding:10px;margin-bottom:10px"></textarea>
+
+<a class="wa-btn" onclick="checkout()">
+📲 Pesan via WhatsApp
+</a>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+<div onclick="showPage('homePage')">🏠</div>
+<div onclick="openCart()">🛒</div>
+<div>☰</div>
+</footer>
+
+<script>
+
+let checkedItems={};
+let selectedCart={};
+
+function toggleCheck(name){
+checkedItems[name]=!checkedItems[name];
+renderProducts();
+}
+
+function masukShop(){
+document.getElementById('landingPage').classList.add('hidden');
+document.querySelector('header').style.display='block';
+document.querySelector('.banner').style.display='block';
+document.querySelector('.cat-title').style.display='block';
+document.querySelector('.categories').style.display='flex';
+document.querySelector('#homePage').style.display='block';
+document.querySelector('footer').style.display='flex';
+}
+
+let products=[
+{name:'Hijab sport',price:15000,oldPrice:20000,category:'Hijab',img:'gambar1.jpg',rating:4.9,flash:true},
+{name:'pasmina visvose',price:25000,oldPrice:35000,category:'Pasmina',img:'gambar2.jpg',rating:4.8},
+{name:'pasmina ceruty',price:15000,oldPrice:20000,category:'Pasmina',img:'gambar3.jpg',rating:4.8,flash:true},
+{name:'segi 3mpat voal',price:18000,oldPrice:25000,category:'Hijab',img:'gambar4.jpg',rating:4.8},
+{name:'bella square',price:12000,oldPrice:18000,category:'Hijab',img:'gambar5.jpg',rating:4.9},
+{name:'segi empat motif',price:20000,oldPrice:30000,category:'Hijab',img:'gambar6.jpg',rating:4.8,flash:true},
+{name:'pasmina plisket',price:25000,oldPrice:35000,category:'Pasmina',img:'gambar7.jpg',rating:4.9},
+{name:'khimar panjang',price:15000,oldPrice:20000,category:'Hijab',img:'gambar8.jpg',rating:4.8,flash:true},
+{name:'hijab satin',price:18000,oldPrice:25000,category:'Hijab',img:'gambar9.jpg',rating:4.8},
+{name:'hijab instan daily',price:12000,oldPrice:18000,category:'Hijab',img:'gambar10.jpg',rating:4.9},
+{name:'pasmina shimer shilk',price:20000,oldPrice:30000,category:'Pasmina',img:'gambar11.jpg',rating:4.9,flash:true},
+{name:'pasmina cashmere turki',price:25000,oldPrice:35000,category:'Pasmina',img:'gambar12.jpg',rating:4.8},
+{name:'hijab bergo motif',price:15000,oldPrice:20000,category:'Hijab',img:'gambar13.jpg',rating:4.9,flash:true},
+{name:'hijab instan tali',price:18000,oldPrice:25000,category:'Hijab',img:'gambar15.jpg',rating:4.8},
+{name:'hijab pasmina instan',price:12000,oldPrice:18000,category:'Pasmina',img:'gambar16.jpg',rating:4.9},
+{name:'Hijab sekolah',price:20000,oldPrice:30000,category:'Hijab',img:'gambar17.jpg',rating:4.9,flash:true},
+{name:'ciput tali iner',price:15000,oldPrice:20000,category:'Ciput',img:'gambar18.jpg',rating:4.8},
+{name:'ciput konde',price:15000,oldPrice:20000,category:'Ciput',img:'gambar19.jpg',rating:4.8,flash:true},
+{name:'Konde',price:12000,oldPrice:18000,category:'Konde',img:'gambar20.jpg',rating:4.9,flash:true}
+];
+
+let currentCategory='all';
+let searchText='';
+
+function searchProduct(t){
+searchText=t.toLowerCase();
+document.querySelector('.clear-btn').style.display=t?'flex':'none';
+renderProducts();
+}
+
+function clearSearch(){
+searchInput.value='';
+searchText='';
+document.querySelector('.clear-btn').style.display='none';
+renderProducts();
+}
+
+function getCart(){
+return JSON.parse(localStorage.getItem('cart')||'[]');
+}
+
+function saveCart(c){
+localStorage.setItem('cart',JSON.stringify(c));
+updateCart();
+}
+
+function tambah(i){
+let c=getCart();
+let p=products[i];
+let f=c.find(x=>x.name===p.name);
+f?f.qty++:c.push({...p,qty:1});
+saveCart(c);renderProducts();
+}
+
+function kurang(i){
+let c=getCart();
+let p=products[i];
+let f=c.find(x=>x.name===p.name);
+if(f){f.qty--; if(f.qty<=0)c=c.filter(x=>x.name!==p.name);}
+saveCart(c);renderProducts();
+}
+
+function getQty(n){
+let c=getCart();
+let f=c.find(x=>x.name===n);
+return f?f.qty:0;
+}
+
+function renderProducts(){
+let list=document.getElementById('productList');
+list.innerHTML='';
+
+let filtered=products.filter(p=>
+(currentCategory==='all'||p.category===currentCategory)
+&& p.name.toLowerCase().includes(searchText)
+);
+
+filtered.forEach((p,i)=>{
+let diskon=Math.round((0-p.price/p.oldPrice)*100);
+
+list.innerHTML+=`
+<div class="card">
+
+${p.flash?'<div class="flash">FLASH</div>':''}
+
+<img src="${p.img}">
+
+<div><b>${p.name}</b></div>
+
+<div class="rating">⭐ ${p.rating} | Terjual 1rb+</div>
+
+<div class="old-price">Rp ${p.oldPrice.toLocaleString()}</div>
+<div class="price">Rp ${p.price.toLocaleString()}</div>
+<div class="discount">${diskon}% OFF</div>
+
+<div>
+<button onclick="event.stopPropagation();kurang(${i})">-</button>
+${getQty(p.name)}
+<button onclick="event.stopPropagation();tambah(${i})">+</button>
+</div>
+
+</div>`;
+});
+}
+
+function updateCart(){
+let c=getCart();
+cartCount.innerText=c.reduce((a,b)=>a+b.qty,0);
+}
+
+function openCart(){
+showPage('cartPage');
+renderCart();
+}
+
+function renderCart(){
+let c=getCart();
+let html=''; let total=0;
+
+c.forEach((i,index)=>{
+
+let checked = selectedCart[i.name] || false;
+if(checked){
+let sub=i.price*i.qty;
+total+=sub;
+}
+
+html+=`
+<div class="cart-item">
+
+<input type="checkbox" ${checked?'checked':''}
+onclick="selectedCart['${i.name}']=this.checked;renderCart()"
+style="transform:scale(1.3)">
+
+<img src="${i.img}" style="width:60px;height:60px;border-radius:8px">
+
+<div style="flex:1">
+<b>${i.name}</b><br>
+Rp ${i.price.toLocaleString()} x ${i.qty}<br>
+Subtotal: Rp ${(i.price*i.qty).toLocaleString()}
+</div>
+
+<button onclick="removeItem(${index})"
+style="background:red;color:white;border:none;border-radius:6px;padding:5px 8px">
+×
+</button>
+
+</div>`;
+});
+
+cartItems.innerHTML=html;
+totalHarga.innerText='Total: Rp '+total.toLocaleString();
+window.subTotal=total;
+}
+
+function removeItem(i){
+let c=getCart();
+c.splice(i,1);
+saveCart(c);
+renderCart();
+updateCart();
+}
+
+function checkout(){
+let c=getCart().filter(i=>selectedCart[i.name]);
+if(c.length===0)return alert('Ceklis dulu barangnya ya!');
+
+let nama=document.getElementById('nama').value;
+let hp=document.getElementById('hp').value;
+let alamat=document.getElementById('alamat').value;
+let ship=parseInt(document.getElementById('shipping').value);
+
+if(!nama||!hp||!alamat)return alert('Isi data');
+
+let total=window.subTotal+ship;
+
+let text='🛒 NOTA ALESYAH SHOP\n\n';
+
+c.forEach(i=>{
+text+=`${i.name} x${i.qty} = Rp ${i.price*i.qty}\n`;
+});
+
+text+=`\nSubtotal: Rp ${window.subTotal}`;
+text+=`\nOngkir: Rp ${ship}`;
+text+=`\nTOTAL: Rp ${total}\n\n`;
+
+text+=`Nama: ${nama}\nHP: ${hp}\nAlamat: ${alamat}`;
+
+let url=`https://wa.me/6282157193556?text=${encodeURIComponent(text)}`;
+
+window.open(url,'_blank');
+}
+
+function filterCategory(c){
+currentCategory=c;
+renderProducts();
+}
+
+function showPage(p){
+homePage.classList.add('hidden');
+cartPage.classList.add('hidden');
+document.getElementById(p).classList.remove('hidden');
+}
+
+renderProducts();
+updateCart();
+
+</script>
+
+</body>
+</html>
